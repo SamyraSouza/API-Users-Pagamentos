@@ -1,11 +1,6 @@
 <?php
 
 namespace App\Filters;
-
-use DeepCopy\Exception\PropertyException;
-use GuzzleHttp\Psr7\Request;
-use PhpParser\Builder\Property;
-
 class InvoiceFilter extends Filter
 {
     protected array $allowedOperatorsField = [

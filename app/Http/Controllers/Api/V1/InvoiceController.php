@@ -8,10 +8,18 @@ use App\Models\Invoice;
 use App\Traits\HttpResponses;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
+use Laravel\Sanctum\HasApiTokens;
+use Illuminate\Foundation\Auth\User as Authenticatable;
 
-class InvoiceController
+class InvoiceController extends \Illuminate\Routing\Controller
 {
     use HttpResponses;
+    use HasApiTokens;
+
+    public function __construct()
+    {
+        $this->middleware('auth:sanctum')->only(['store', 'update']);
+    }
     /**
      * Display a listing of the resource.
      */
@@ -25,6 +33,13 @@ class InvoiceController
      */
     public function store(Request $request)
     {
+
+        $user = auth('sanctum')->user();
+            
+        if (!$user) {
+            return $this->error('Unauthorized', 403);
+        }
+
         $validator = Validator::make($request->all(), [
             'user_id' => 'required',
             'type' => 'required|max:1',
